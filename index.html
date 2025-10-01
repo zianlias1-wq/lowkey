@@ -2,27 +2,154 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alooooo cantikkk</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Surat Cinta Animasi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #f9d2e2 0%, #f2f6fc 100%);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Pacifico', cursive;
+    }
+    .container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+    }
+    .love-letter {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+      top: 70px;
+      left: 50px;
+      z-index: 3;
+      padding: 36px 24px;
+      font-size: 24px;
+      color: #e75480;
+      letter-spacing: 1px;
+      opacity: 1;
+      transition: opacity .3s;
+      overflow: hidden;
+    }
+    .envelope {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      top: 70px;
+      left: 50px;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .envelope-base {
+      fill: #fff;
+      stroke: #e75480;
+      stroke-width: 3;
+    }
+    .envelope-flap {
+      fill: #f9d2e2;
+      stroke: #e75480;
+      stroke-width: 3;
+    }
+    .paper-plane {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      top: 190px;
+      left: 150px;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .heart {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      opacity: 0;
+    }
+    .heart svg {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- GANTI "gambar-bucin.png" dengan nama file gambarmu -->
-    <img src="Bucin.jpg" alt="Gambar Bucin" class="gambar-bucin">
-    
-    <h1>Rayuan Bucin Hari Ini</h1>
-    
-    <!-- GANTI "musik-bucin.mp3" dengan nama file musikmu -->
-    <audio id="bucinMusic" controls autoplay loop>
-      <source src="blue.mp3" type="audio/mpeg">
-      Musik tidak didukung browser-mu.
-    </audio>
-    
-    <div id="quote" class="quote">Klik tombol di bawah untuk rayuan bucin!</div>
-    <button id="btnRayu">Rayu Aku!</button>
+    <div class="love-letter"></div>
+    <svg class="envelope" viewBox="0 0 300 200">
+      <rect class="envelope-base" x="0" y="50" width="300" height="150" rx="18"/>
+      <polygon class="envelope-flap" points="0,50 150,0 300,50"/>
+    </svg>
+    <svg class="paper-plane" viewBox="0 0 100 100">
+      <polygon points="0,100 100,50 0,0 20,50" fill="#fff" stroke="#e75480" stroke-width="3"/>
+    </svg>
+    <div class="heart">
+      <svg viewBox="0 0 32 32">
+        <path d="M23.6,5.6c-2.3,0-4.4,1.1-5.6,2.9c-1.2-1.8-3.3-2.9-5.6-2.9C7.1,5.6,4,8.7,4,12.4c0,5.3,7.7,9.8,12,13.1
+          c4.3-3.3,12-7.8,12-13.1C28,8.7,24.9,5.6,23.6,5.6z" fill="#e75480"/>
+      </svg>
+    </div>
   </div>
-  <script src="script.js"></script>
-</body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    // Surat cinta dengan typing effect
+    const letterText = `Dear kamu,\n\nAku ingin bilang, kamu itu spesial. Semoga hari-harimu selalu bahagia, dan semoga surat ini jadi pengingat kalau ada seseorang yang tulus menyayangimu.\n\n❤️`;
+    const loveLetterElem = document.querySelector('.love-letter');
+    let i = 0;
+    function typeLetter() {
+      if (i < letterText.length) {
+        loveLetterElem.innerHTML += letterText[i] === '\n' ? '<br>' : letterText[i];
+        i++;
+        setTimeout(typeLetter, 35);
+      } else {
+        setTimeout(envelopeAnim, 1000);
+      }
+    }
 
+    // Animasi surat masuk amplop
+    function envelopeAnim() {
+      gsap.to(loveLetterElem, { y: 60, scale: 0.85, duration: 1, ease: "power1.inOut", opacity: 1 });
+      gsap.to(loveLetterElem, { opacity: 0, duration: 0.5, delay: 1.2 });
+      gsap.to('.envelope', { opacity: 1, duration: 0.7, delay: 1.5, onComplete: planeTransform });
+    }
+
+    // Animasi amplop berubah jadi pesawat kertas
+    function planeTransform() {
+      gsap.to('.envelope', { scale: 0.45, x: 120, y: 120, duration: .9, ease: "power1.inOut" });
+      gsap.to('.envelope', { opacity: 0, duration: 0.4, delay: 1.1 });
+      gsap.to('.paper-plane', { opacity: 1, duration: 0.6, delay: 1.1, onComplete: planeFly });
+    }
+
+    // Animasi pesawat terbang + efek hati
+    function planeFly() {
+      gsap.to('.paper-plane', {
+        x: 180, y: -220, rotation: -40, duration: 4,
+        ease: "power2.inOut",
+        onStart: heartPop
+      });
+      gsap.to('.paper-plane', { opacity: 0, duration: 0.7, delay: 3.8 });
+    }
+
+    // Efek hati muncul
+    function heartPop() {
+      const heart = document.querySelector('.heart');
+      gsap.to(heart, { opacity: 1, scale: 1.2, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+      gsap.to(heart, { y: -120, scale: 1.5, opacity: 0, duration: 2, delay: 1.6 });
+    }
+
+    // Mulai animasi setelah load
+    window.onload = typeLetter;
+  </script>
+</body>
 </html>
